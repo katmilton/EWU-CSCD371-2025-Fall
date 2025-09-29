@@ -69,12 +69,13 @@ public class Program
 
     public static Question[] LoadQuestions(string filePath)
     {
+        const int questionSize = 5;
         string[] lines = File.ReadAllLines(filePath);
 
-        Question[] questions = new Question[lines.Length / 5];
+        Question[] questions = new Question[lines.Length / questionSize];
         for (int i = 0; i < questions.Length; i++)
         {
-            int lineIndex = i * 5;
+            int lineIndex = i * questionSize;
             string questionText = lines[lineIndex];
 
             string answer1 = lines[lineIndex + 1];
