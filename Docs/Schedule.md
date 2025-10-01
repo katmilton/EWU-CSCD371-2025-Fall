@@ -14,7 +14,6 @@
 - Syllabus
 - Intro to Git
 - Git Fundamentals
-
 ## Week 2
 
 ### 9/30
@@ -28,51 +27,49 @@
 - Data Types
 - Analyzers
 
-
 <!-- ## Week 3 - Assignment 2
 
-### 10/8
-- nullables
-- string interpolation
+### 10/7
 
+- Nullable reference types
+- string interpolation
 - Go over Assignment 1
 
-### 10/10
+### 10/9
 
 - Properties
 - Methods
 
 ## Week 4 - Assignment 3
 
-### 10/15
+### 10/14
 
-- Inheritence cont.
+- Inheritance (cont.)
 - nullability continuation
 
-### 10/17
+### 10/16
 
 - Explicit vs implicit interface implementation
 - Extension Methods
 
 ## Week 5 - Assignment 4
 
-### 10/22
+### 10/21
 
 - Local Functions
 - ref vs value types & structs
 - reference vs value equality
-- Structs
-- Records
+- Structs & Records
 
-### 10/24
+### 10/23
 
-- Interfaces/virtual
+- Interfaces / virtual
 - Overriding object members
-- Mocking - Test double
+- Mocking (Test Doubles)
 
 ## Week 6 - Assignment 5
 
-### 10/29
+### 10/28
 
 - Pattern matching
 - Well formed types
@@ -80,49 +77,76 @@
   - Referencing other assemblies
   - Exception Handling
 
-### 10/31
+### 10/30
 
 - using statements
-- Dispose
+- Dispose / IDisposable
 
 ## Week 7 - Assignment 6
 
-### 11/5
+### 11/4
 
-### 11/7
+- (Topics TBA / buffer / review)
+
+### 11/6
 
 - Due: Assignment 6
-- Assign: Assignment 7-8 - LINQ and Collections
+- Assign: Assignment 7-8 (LINQ and Collections)
+- Intro to Collections & IEnumerable
 
-## Week 8 - Assignment 7&8
+## Week 8 - Assignment 7 & 8
 
-### 11/12
+### 11/11
 
-### 11/14
+- No Class (Veterans Day)
+
+### 11/13
+
+- LINQ Fundamentals
+- Deferred vs Immediate Execution
+- Collection choices / performance
 
 ## Week 9
 
-### 11/19
+### 11/18
 
-### 11/21
+- Advanced LINQ (GroupJoin, Zip, Aggregate)
+- Query Syntax vs Method Syntax
+
+### 11/20
 
 - Due: Assignment 7-8
-- Assign: Assignment 9&10 - Multithreaded Programming with Task Parallel Library (TPL)
+- Assign: Assignment 9-10 (Multithreaded Programming with TPL)
+- Intro to Tasks & Threading Concepts
 
-## Week 10 - Assignment 9&10
+## Week 10 - Assignment 9 & 10
 
-### 11/26
+### 11/25
 
-### 11/28
+- Task Parallel Library (TPL)
+- async / await deep dive
 
-## Week 11
-- Last Week of Class
+### 11/27
 
-### 12/3
+- No Class (Thanksgiving)
 
-### 12/5
+## Week 11 - Last Week of Class
+
+### 12/2
+
+- Parallel LINQ (PLINQ) overview
+- Synchronization (locks, concurrent collections)
+- Wrap-up / Q&A
+
+### 12/4
+
+- (Buffer / student presentations / catch-up)
+- Final clarifications for Assignment 9 & 10
 
 ## Finals Week
 
-- No Class
-- Due: Assignment 9&10 -->
+- No Class Meetings
+- Due: Assignment 9 & 10 (Final Project) — exact due date TBA
+
+---
+Note: This schedule remains tentative and topics may shift based on class progress. Always prioritize announcements made in class or posted to Teams.
