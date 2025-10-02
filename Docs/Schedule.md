@@ -27,7 +27,7 @@
 - Data Types
 - Analyzers
 
-<!-- ## Week 3 - Assignment 2
+## Week 3 - Assignment 2
 
 ### 10/7
 
