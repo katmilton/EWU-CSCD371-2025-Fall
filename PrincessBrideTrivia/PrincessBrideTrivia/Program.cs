@@ -3,7 +3,7 @@
 
 public class Program
 {
-    public static void Main(string[] args)
+    public static void Main(string[] args) 
     {
         string filePath = GetFilePath();
         Question[] questions = LoadQuestions(filePath);
