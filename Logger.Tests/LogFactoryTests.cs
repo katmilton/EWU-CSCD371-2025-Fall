@@ -24,7 +24,7 @@ public class LogFactoryTests
         var logger = factory.CreateLogger(nameof(LogFactoryTests));
 
         Assert.IsNotNull(logger);
-        Assert.IsInstanceOfType(logger, typeof(Logger.FileLogger));
+        Assert.IsInstanceOfType<Logger.FileLogger>(logger);
         Assert.AreEqual(nameof(LogFactoryTests), logger!.ClassName);
     }
 
