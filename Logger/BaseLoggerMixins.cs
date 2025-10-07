@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace Logger;
 
@@ -18,11 +19,10 @@ public static class BaseLoggerMixins
 
     private static void LogWithLevel(BaseLogger logger, LogLevel level, string message, object[] args)
     {
-        if (logger is null)
-            throw new ArgumentNullException(nameof(logger));
+       ArgumentNullException.ThrowIfNull(logger);
 
         var formatted = (args is { Length: > 0 })
-            ? string.Format(message, args)
+            ? string.Format(CultureInfo.InvariantCulture,message, args)
             : message;
 
         logger.Log(level, formatted);
