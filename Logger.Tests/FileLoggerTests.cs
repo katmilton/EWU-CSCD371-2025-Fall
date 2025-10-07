@@ -10,6 +10,15 @@ namespace Logger.Tests;
 public class FileLoggerTests
 {
     private readonly string _testFilePath = "testlog.txt";
+    [TestInitialize]
+    public void TestInitiallize()
+    {
+        if (File.Exists(_testFilePath))
+        {
+            File.Delete(_testFilePath); 
+        }
+    }
+
     [TestMethod]
     public void Log_WritesMessageToFile()
     {
@@ -31,5 +40,14 @@ public class FileLoggerTests
         StringAssert.Contains(lines[0], message, "Log line does not contain the message.");
         StringAssert.Contains(lines[0], level.ToString(), "Log line does not contain the log level.");
         StringAssert.Contains(lines[0], "TestClass", "Log line does not contain the class name.");
+    }
+
+    [TestCleanup]
+    public void TestCleanUp()
+    {
+        if (File.Exists(_testFilePath))
+        {
+            File.Delete(_testFilePath);
+        }
     }
 }

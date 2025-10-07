@@ -31,24 +31,34 @@ public class BaseLoggerMixinsTests
     }
 
     [TestMethod]
-    public void Warning_UsesCorrectLogLevelandFormats_Success()
+    public void Warning_UsesCorrectLogLevel_Success()
     {
-        var logger = new TestLogger();
+        TestLogger logger = new TestLogger();
 
         logger.Warning("Low disk: {0}%", 12);
-        
+
         Assert.AreEqual(1, logger.LoggedMessages.Count);
         Assert.AreEqual(LogLevel.Warning, logger.LoggedMessages[0].LogLevel);
+    }
+
+    [TestMethod]
+    public void Warning_FormatsMessageCorrectly_Success()
+    {
+        TestLogger logger = new TestLogger();
+
+        logger.Warning("Low disk: {0}%", 12);
+
+        Assert.AreEqual(1, logger.LoggedMessages.Count);
         Assert.AreEqual("Low disk: 12%", logger.LoggedMessages[0].Message);
     }
-}
 
-public class TestLogger : BaseLogger
-{
-    public List<(LogLevel LogLevel, string Message)> LoggedMessages { get; } = new List<(LogLevel, string)>();
-
-    public override void Log(LogLevel logLevel, string message)
+    public class TestLogger : BaseLogger
     {
-        LoggedMessages.Add((logLevel, message));
+        public List<(LogLevel LogLevel, string Message)> LoggedMessages { get; } = new List<(LogLevel, string)>();
+
+        public override void Log(LogLevel logLevel, string message)
+        {
+            LoggedMessages.Add((logLevel, message));
+        }
     }
 }
