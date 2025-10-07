@@ -52,6 +52,77 @@ public class BaseLoggerMixinsTests
         Assert.AreEqual("Low disk: 12%", logger.LoggedMessages[0].Message);
     }
 
+    [TestMethod]
+    public void Error_UsesCorrectLogLevel_Succes()
+    {
+        TestLogger logger = new TestLogger();
+
+        logger.Error("System failure: {0}", "Disk error");
+
+        Assert.AreEqual(1, logger.LoggedMessages.Count);
+        Assert.AreEqual(LogLevel.Error, logger.LoggedMessages[0].LogLevel);
+
+    }
+
+    [TestMethod]
+    public void Error_FormatsMessageCorrectly_Success()
+    {
+        TestLogger logger = new TestLogger();
+
+        logger.Error("System failure: {0}", "Disk error");
+
+        Assert.AreEqual(1, logger.LoggedMessages.Count);
+        Assert.AreEqual("System failure: Disk error", logger.LoggedMessages[0].Message);
+    }
+
+    [TestMethod]
+    public void Debug_UsesCorrectLogLevel_Succes()
+    {
+        TestLogger logger = new TestLogger();
+
+        logger.Debug("Variable x = {0}", 42);
+
+        Assert.AreEqual(1, logger.LoggedMessages.Count);
+        Assert.AreEqual(LogLevel.Debug, logger.LoggedMessages[0].LogLevel);
+    }
+
+    [TestMethod]
+    public void Debug_FormatsMessageCorrectly_Success()
+    {
+        TestLogger logger = new TestLogger();
+
+        logger.Debug("Variable x = {0}", 42);
+
+        Assert.AreEqual(1, logger.LoggedMessages.Count);
+        Assert.AreEqual("Variable x = 42", logger.LoggedMessages[0].Message);
+    }
+
+    [TestMethod]
+    public void Information_UsesCorrectLogLevel_Succes()
+    {
+        TestLogger logger = new TestLogger();
+
+        logger.Information("User {0} logged in", "A");
+
+        Assert.AreEqual(1, logger.LoggedMessages.Count);
+        Assert.AreEqual(LogLevel.Information, logger.LoggedMessages[0].LogLevel);
+
+    }
+
+    [TestMethod]
+    public void Information_FormatsMessageCorrectly_Success()
+    {
+        TestLogger logger = new TestLogger();
+
+        logger.Information("User {0} logged in", "A");
+
+        Assert.AreEqual(1, logger.LoggedMessages.Count);
+        Assert.AreEqual("User A logged in", logger.LoggedMessages[0].Message);
+    }
+
+}
+
+
     public class TestLogger : BaseLogger
     {
         public List<(LogLevel LogLevel, string Message)> LoggedMessages { get; } = new List<(LogLevel, string)>();
@@ -61,4 +132,5 @@ public class BaseLoggerMixinsTests
             LoggedMessages.Add((logLevel, message));
         }
     }
-}
+
+
