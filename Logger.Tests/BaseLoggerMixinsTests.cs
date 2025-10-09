@@ -33,7 +33,7 @@ public class BaseLoggerMixinsTests
     [TestMethod]
     public void Warning_UsesCorrectLogLevel_Success()
     {
-        TestLogger logger = new TestLogger();
+        TestLogger logger = new();
 
         logger.Warning("Low disk: {0}%", 12);
 
@@ -44,7 +44,7 @@ public class BaseLoggerMixinsTests
     [TestMethod]
     public void Warning_FormatsMessageCorrectly_Success()
     {
-        TestLogger logger = new TestLogger();
+        TestLogger logger = new();
 
         logger.Warning("Low disk: {0}%", 12);
 
@@ -53,9 +53,9 @@ public class BaseLoggerMixinsTests
     }
 
     [TestMethod]
-    public void Error_UsesCorrectLogLevel_Succes()
+    public void Error_UsesCorrectLogLevel_Success()
     {
-        TestLogger logger = new TestLogger();
+        TestLogger logger = new();
 
         logger.Error("System failure: {0}", "Disk error");
 
@@ -66,8 +66,8 @@ public class BaseLoggerMixinsTests
 
     [TestMethod]
     public void Error_FormatsMessageCorrectly_Success()
-    {
-        TestLogger logger = new TestLogger();
+    { 
+        TestLogger logger = new();
 
         logger.Error("System failure: {0}", "Disk error");
 
@@ -78,7 +78,7 @@ public class BaseLoggerMixinsTests
     [TestMethod]
     public void Debug_UsesCorrectLogLevel_Succes()
     {
-        TestLogger logger = new TestLogger();
+        TestLogger logger = new();
 
         logger.Debug("Variable x = {0}", 42);
 
@@ -89,7 +89,7 @@ public class BaseLoggerMixinsTests
     [TestMethod]
     public void Debug_FormatsMessageCorrectly_Success()
     {
-        TestLogger logger = new TestLogger();
+        TestLogger logger = new();
 
         logger.Debug("Variable x = {0}", 42);
 
@@ -100,7 +100,7 @@ public class BaseLoggerMixinsTests
     [TestMethod]
     public void Information_UsesCorrectLogLevel_Succes()
     {
-        TestLogger logger = new TestLogger();
+        TestLogger logger = new();
 
         logger.Information("User {0} logged in", "A");
 
@@ -112,7 +112,7 @@ public class BaseLoggerMixinsTests
     [TestMethod]
     public void Information_FormatsMessageCorrectly_Success()
     {
-        TestLogger logger = new TestLogger();
+        TestLogger logger = new();
 
         logger.Information("User {0} logged in", "A");
 

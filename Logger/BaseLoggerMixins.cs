@@ -21,10 +21,7 @@ public static class BaseLoggerMixins
     {
        ArgumentNullException.ThrowIfNull(logger);
 
-        var formatted = (args is { Length: > 0 })
-            ? string.Format(CultureInfo.InvariantCulture, message, args)
-            : message;
-
-        logger.Log(level, formatted);
+        logger.Log(level, string.Format(CultureInfo.InvariantCulture, message, args));
+        
     }
 }
