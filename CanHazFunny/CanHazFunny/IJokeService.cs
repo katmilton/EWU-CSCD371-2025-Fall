@@ -1,10 +1,7 @@
-﻿using System;
-namespace CanHazFunny;
+﻿namespace CanHazFunny;
 
-public class IJokeService
+public interface IJokeService
 {
-	public IJokeService()
-	{
-		string GetJoke();
-	}
+	string GetJoke();
+	
 }
