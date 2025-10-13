@@ -7,7 +7,7 @@ using Xunit;
 
 namespace CanHazFunny.Tests;
 
-class FakeHandler : HttpMessageHandler
+internal sealed class FakeHandler : HttpMessageHandler
 {
 	private readonly string _content;
 	public FakeHandler(string content) => _content = content;
@@ -18,7 +18,7 @@ class FakeHandler : HttpMessageHandler
 		});
 }
 
-class CapturingHandler: HttpMessageHandler
+internal sealed class CapturingHandler: HttpMessageHandler
 {
 	public Uri? LastUri { get; private set; }
 	protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
