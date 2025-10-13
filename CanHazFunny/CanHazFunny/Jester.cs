@@ -1,17 +1,6 @@
 ﻿using System;
 namespace CanHazFunny;
 
-
-/* TODO:
- * As you are handling the Output Interface, feel free to modify 
-or delete this as you see fit. I've just kept this here for testing.
-Do delete this comment when you do.
- */
-public interface IOutput
-{
-	void WriteLine(string message);
-}
-
 public class Jester
 {
 
