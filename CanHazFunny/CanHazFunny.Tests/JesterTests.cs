@@ -7,7 +7,7 @@ namespace CanHazFunny.Tests;
 public class JesterTests
 {
     [Fact]
-    public void Ctor_NullOutput_ThrowsArgumentNullException()
+    public void Constructor_NullOutput_ThrowsArgumentNullException()
     {
         // Arrange
         var jokeServiceMock = new Mock<IJokeService>().Object;
@@ -16,7 +16,7 @@ public class JesterTests
     }
 
     [Fact]
-    public void Ctor_NullJokeService_ThrowsArgumentNullException()
+    public void Constructor_NullJokeService_ThrowsArgumentNullException()
     {
         // Arrange
         var outputMock = new Mock<IOutput>().Object;

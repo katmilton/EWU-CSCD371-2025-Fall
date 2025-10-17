@@ -20,14 +20,12 @@ public class Jester
 		for (int i = 0; i < MaxAttempts; i++)
 		{
 			var joke = _jokeService.GetJoke();
-			bool hasChuck = joke.Contains("Chuck", StringComparison.OrdinalIgnoreCase);
-			bool hasNorris = joke.Contains("Norris", StringComparison.OrdinalIgnoreCase);
-			
-			if (!hasChuck && !hasNorris)
+			if (!joke.Contains("Chuck Norris", StringComparison.OrdinalIgnoreCase))
 			{
 				_output.WriteLine(joke);
 				return;
 			}
+			
 		}
 		_output.WriteLine("Failed to find an acceptable joke. Try again!");
 	}
