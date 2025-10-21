@@ -14,4 +14,9 @@ public sealed record class Book : EntityBase
 
     /// <inheritdoc />
     public override string Name => Title;
+
+    public bool Equals(Book? other) =>
+            other is not null && Id == other.Id;
+
+    public override int GetHashCode() => Id.GetHashCode();
 }
