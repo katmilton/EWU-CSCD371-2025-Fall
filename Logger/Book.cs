@@ -4,6 +4,7 @@ namespace Logger;
 /// <summary>
 /// Book entity with Title/Author.
 /// Implements IEntity implicity so Id/Name can be reached directly.
+/// Includes init only implementation to prevent mutation.
 /// Name = Title.
 /// </summary>
 

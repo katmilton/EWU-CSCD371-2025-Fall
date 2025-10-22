@@ -3,7 +3,7 @@ namespace Logger;
 
 /// <summary>
 /// Employee entity.
-/// IEntity is implemented implicitly.
+/// IEntity is implemented implicitly, including init only implementation to prevent mutation.
 /// </summary>
 
 public sealed record class Employee : PersonEntity
