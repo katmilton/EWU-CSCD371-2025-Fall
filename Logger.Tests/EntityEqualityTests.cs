@@ -1,5 +1,4 @@
-﻿#nullable enable
-using System;
+﻿using System;
 using Xunit;
 
 namespace Logger.Tests;

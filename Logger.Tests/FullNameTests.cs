@@ -1,4 +1,3 @@
-#nullable enable
 using System;
 using Xunit;
 
@@ -8,7 +7,7 @@ public class FullNameTests
 {
 
     [Fact]
-    public void FullName_WithMiddle_ToString()
+    public void ToString_WithMiddleName_PrintsFullName()
     {
         // Arrange 
         var fullName = new FullName("Paul", "Pogba", "P");
@@ -21,7 +20,7 @@ public class FullNameTests
     }
 
     [Fact]
-    public void FullName_WithoutMiddle_ToString()
+    public void ToString_WithoutMiddleName_PrintsFullName()
     {
         // Arrange 
         var fullName = new FullName("Kylian", "Mbappe");

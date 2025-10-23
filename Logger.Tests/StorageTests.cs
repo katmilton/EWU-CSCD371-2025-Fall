@@ -1,5 +1,4 @@
-﻿#nullable enable
-using System;
+﻿using System;
 using Xunit;
 
 namespace Logger.Tests;
@@ -12,7 +11,7 @@ public class StorageTests
     {
         
         // Arrange
-        var storage = new Storage();
+        Storage storage = new Storage();
         var entities = new IEntity[]
         {
             new Student { FullName = new ("Inigo", "Montoya") },
@@ -35,9 +34,9 @@ public class StorageTests
     {
         // Arrange
         Guid id = Guid.NewGuid();
-        var storage = new Storage();
-        var student1 = new Student { Id = id, FullName = new("Bob", "Smith") };
-        var student2 = new Student { Id = id, FullName = new("Robert", "Garcia") };
+        Storage storage = new Storage();
+        Student student1 = new Student { Id = id, FullName = new("Bob", "Smith") };
+        Student student2 = new Student { Id = id, FullName = new("Robert", "Garcia") };
 
         // Act
         storage.Add(student1);
@@ -53,8 +52,8 @@ public class StorageTests
     public void Remove_Entity_RemovesFromStorage()
     {
         // Arrange
-        var storage = new Storage();
-        var book = new Book { Title = "1984" };
+        Storage storage = new Storage();
+        Book book = new Book { Title = "1984" };
 
         // Act
         storage.Add(book);
@@ -68,8 +67,8 @@ public class StorageTests
     public void Contains_Entity_EntityExists()
     {
         // Arrange
-        var storage = new Storage();
-        var book = new Book { Title = "Fahrenheit 451" };
+        Storage storage = new Storage();
+        Book book = new Book { Title = "Fahrenheit 451" };
 
         // Act
         storage.Add(book);
@@ -82,8 +81,8 @@ public class StorageTests
     public void Get_ById_ReturnsEntity()
     {
         // Arrange
-        var storage = new Storage();
-        var employee = new Employee { FullName = new("John", "Dober"), Department = "CS" };
+        Storage storage = new Storage();
+        Employee employee = new Employee { FullName = new("John", "Dober"), Department = "CS" };
 
         // Act
         storage.Add(employee);
@@ -98,7 +97,7 @@ public class StorageTests
     {
         // Arrange
         Guid id = Guid.NewGuid();
-        var storage = new Storage();
+        Storage storage = new Storage();
 
         // Act
         var retrieved = storage.Get(id);

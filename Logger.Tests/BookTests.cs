@@ -1,4 +1,3 @@
-#nullable enable
 using System;
 using Xunit;
 
@@ -37,7 +36,7 @@ public class BookTests
     }
 
     [Fact]
-    public void Book_ReturnsNull_IfAuthorNotSet()
+    public void Author_AuthorNotSet_ReturnsNull()
     {
         // Arrange
         var book = new Book { Title = "Lock Wood" };
