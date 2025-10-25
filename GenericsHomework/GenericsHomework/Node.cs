@@ -20,7 +20,7 @@
 
         ///<summary>
         /// The next node in the circular list. If this is the only node, Next points to itself.
-        /// Non-nullable.
+        /// Non-nullable per assignment guidelines; initialized in constructor.
         /// </summary>
         public Node<T> Next { get; set; }
 
