@@ -3,7 +3,7 @@
     public class NodeTests
     {
         [Fact]
-        public void Test1()
+        public void NewNode_HasSelfLoopInNext()
         {
 
         }
