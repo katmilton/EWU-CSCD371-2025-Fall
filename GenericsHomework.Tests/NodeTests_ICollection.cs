@@ -1,14 +1,19 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GenericsHomework.Tests;
 
 [TestClass]
-public class NodeTests_ICollection
+public class NodeICollectionTests
 {
+
+    private static readonly int[] ExpectedCopyTo = new int[] { 0, 5, 6, 7, 0 };
+    private static readonly List<string> ExpectedEnumeratedItems = new List<string> { "x", "y", "z" };
+
     [TestMethod]
-    public void ICollectionCount_SingleAndMulti_Success()
+    public void ICollectionCountSingleAndMultiSuccess()
     {
         var n = new Node<int>(1);
         Assert.AreEqual<int>(1, ((ICollection<int>)n).Count);
@@ -19,7 +24,7 @@ public class NodeTests_ICollection
     }
 
     [TestMethod]
-    public void ICollection_AddIntoEmptyAfterClear_Success()
+    public void ICollectionAddIntoEmptyAfterClearSuccess()
     {
         var n = new Node<string>("first");
         n.Clear();
@@ -31,7 +36,7 @@ public class NodeTests_ICollection
     }
 
     [TestMethod]
-    public void ICollection_RemoveHeadOnlyItemAndEmpty_Success()
+    public void ICollectionRemoveHeadOnlyItemAndEmptySuccess()
     {
         var n = new Node<int>(42);
         bool removed = ((ICollection<int>)n).Remove(42);
@@ -43,7 +48,7 @@ public class NodeTests_ICollection
     }
 
     [TestMethod]
-    public void ICollection_RemoveHeadInMultiListShiftsHead_Success()
+    public void ICollectionRemoveHeadInMultiListShiftsHeadSuccess()
     {
         var n = new Node<string>("a");
         n.Append("b");
@@ -60,7 +65,7 @@ public class NodeTests_ICollection
     }
 
     [TestMethod]
-    public void ICollection_RemoveMiddleNode_Success()
+    public void ICollectionRemoveMiddleNodeSuccess()
     {
         var n = new Node<int>(1);
         n.Append(2);
@@ -75,7 +80,7 @@ public class NodeTests_ICollection
     }
 
     [TestMethod]
-    public void ICollection_CopyToWritesSequentially_Success()
+    public void ICollectionCopyToWritesSequentiallySuccess()
     {
         var n = new Node<int>(5);
         n.Append(6);
@@ -84,23 +89,23 @@ public class NodeTests_ICollection
         var arr = new int[5];
         ((ICollection<int>)n).CopyTo(arr, 1);
 
-        CollectionAssert.AreEqual(new[] { 0, 5, 6, 7, 0 }, arr);
+        CollectionAssert.AreEqual(ExpectedCopyTo, arr);
     }
 
     [TestMethod]
-    public void ICollection_EnumeratesAllItemsOnce_Success()
+    public void ICollectionEnumeratesAllItemsOnceSuccess()
     {
         var n = new Node<string>("x");
         n.Append("y");
         n.Append("z");
 
         var items = ((IEnumerable<string>)n).ToList();
-        CollectionAssert.AreEquivalent(new[] { "x", "y", "z" }, items);
+        CollectionAssert.AreEquivalent(ExpectedEnumeratedItems, items);
         Assert.AreEqual<int>(3, items.Count);
     }
 
     [TestMethod]
-    public void ICollection_IsReadOnlyIsFalse_Success()
+    public void ICollectionIsReadOnlyIsFalseSuccess()
     {
         var n = new Node<int>(1);
         Assert.IsFalse(((ICollection<int>)n).IsReadOnly);
