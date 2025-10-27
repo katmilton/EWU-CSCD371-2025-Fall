@@ -1,7 +1,0 @@
-<Solution>
-  <Folder Name="/Solution Items/">
-    <File Path="Directory.Build.Props" />
-  </Folder>
-  <Project Path="../GenericsHomework.Tests/GenericsHomework.Tests.csproj" Id="122e53ee-6f56-4b6d-b8a9-d6f5b16e1c36" />
-  <Project Path="GenericsHomework/GenericsHomework.csproj" />
-</Solution>

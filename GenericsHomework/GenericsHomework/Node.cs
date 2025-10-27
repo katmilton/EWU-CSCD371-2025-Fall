@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace GenericsHomework;
 
@@ -8,6 +9,7 @@ namespace GenericsHomework;
 /// A node that stores a homogenous value of type T and references to other nodes.
 /// Participates in a circularly linked structure.
 /// </summary>
+[SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix", Justification = "Represents a single node, not a collection.")]
 public class Node<T> : ICollection<T>
 {
     private T _value;
@@ -145,8 +147,8 @@ public class Node<T> : ICollection<T>
     /// </summary>
     public void CopyTo(T[] array, int arrayIndex)
     {
-        if (array is null) throw new ArgumentNullException(nameof(array));
-        if (arrayIndex < 0) throw new ArgumentOutOfRangeException(nameof(arrayIndex));
+        ArgumentNullException.ThrowIfNull(array);
+        ArgumentOutOfRangeException.ThrowIfNegative(arrayIndex, nameof(arrayIndex));
         if (array.Length - arrayIndex < Count) throw new ArgumentException("The destination array has insufficient space.");
         if (_isEmpty) return;
         array[arrayIndex++] = _value;
@@ -183,9 +185,6 @@ public class Node<T> : ICollection<T>
             _value = removed._value;
             Next = removed.Next;
             return true;
-            //// Copy next node's value into this node and remove next node
-            //this._value = this.Next._value;
-            //this.Next = this.Next.Next;
           
         }
         Node<T> previous = this;
