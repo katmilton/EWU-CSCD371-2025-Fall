@@ -6,6 +6,8 @@ namespace GenericsHomework.Tests;
 [TestClass]
 public class VennDiagramTests
 {
+    private static readonly string[] ExpectedUnion = { "x", "y", "z" };
+
     [TestMethod]
     public void Intersection_ReturnsOnlyCommonItems_Success()
     {
@@ -30,7 +32,7 @@ public class VennDiagramTests
         b.Add("y"); b.Add("z");
 
         var union = vd.Union("A", "B").OrderBy(s => s).ToList();
-        CollectionAssert.AreEqual(new[] { "x", "y", "z" }, union);
+        CollectionAssert.AreEqual(ExpectedUnion, union);
     }
 
     [TestMethod]
