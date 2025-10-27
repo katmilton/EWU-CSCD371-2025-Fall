@@ -44,6 +44,39 @@ public class NodeTests
     }
 
     [TestMethod]
+    public void Append_DuplicateOnHead_ThrowsInvalidOperationException()
+    {
+        // Arrange
+        Node<int> n1 = new Node<int>(10);
+
+        // Act & Assert
+        Assert.ThrowsException<InvalidOperationException>(() => n1.Append(10));
+    }
+
+    [TestMethod]
+    public void Append_DuplicateInMiddle_ThrowsInvalidOperationException()
+    {
+        // Arrange
+        Node<int> n1 = new Node<int>(10);
+        n1.Append(20);
+        n1.Append(30);
+
+        // Act & Assert
+        Assert.ThrowsException<InvalidOperationException>(() => n1.Append(20));
+    }
+
+    [TestMethod]
+    public void Append_DuplicateNullReference_ThrowsInvalidOperationException()
+    {
+        // Arrange
+        Node<string?> n1 = new Node<string?>(null);
+        n1.Append("x");
+
+        // Act & Assert
+        Assert.ThrowsException<InvalidOperationException>(() => n1.Append(null));
+    }
+
+    [TestMethod]
     public void Clear_RemovesAllButCurrentNode_Success()
     {
         // arrange

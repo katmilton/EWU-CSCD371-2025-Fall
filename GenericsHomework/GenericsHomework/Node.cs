@@ -23,19 +23,30 @@ public class Node<T>
     /// </summary>
     public Node<T> Next { get; private set; }
 
-
     /// <summary>
     /// Returns the underlying value's ToString() representation.
     /// </summary>
     public override string ToString() 
         => _value?.ToString() ?? string.Empty;
 
-
-    /// Stubs for methods to be implemented.
+    /// <summary>
+    /// Appends a new node containing the specified value immediately after this node,
+    /// rejecting duplicates.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when a node with the same value already exists in the list.
+    /// </exception>
     public void Append(T value)
     {
-        Node<T> newNode = new Node<T>(value);
-        newNode.Next = this.Next;
+        if (this.Exists(value))
+        {
+            throw new InvalidOperationException("Duplicate value not allowed in this circular list.");
+        }
+
+        Node<T> newNode = new Node<T>(value)
+        {
+            Next = this.Next
+        };
         this.Next = newNode;
     }
 
