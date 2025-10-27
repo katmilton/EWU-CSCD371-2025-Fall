@@ -18,8 +18,10 @@
     <ProjectReference Include="..\GenericsHomework\GenericsHomework\GenericsHomework.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Using Include="Xunit" />
-  </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="MSTest.TestFramework" Version="3.*" />
+		<PackageReference Include="MSTest.TestAdapter" Version="3.*" />
+	</ItemGroup>
 
 </Project>

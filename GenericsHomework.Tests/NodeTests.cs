@@ -1,34 +1,37 @@
-﻿namespace GenericsHomework.Tests
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+namespace GenericsHomework.Tests
 {
+    [TestClass]
     public class NodeTests
     {
-        [Fact]
+        [TestMethod]
         public void NewNode_HasSelfLoopInNext()
         {
             var n = new Node<int>(42);
-            Assert.NotNull(n.Next);
-            Assert.Same(n, n.Next);
+            Assert.IsNotNull(n.Next);
+            Assert.AreSame(n, n.Next);
         }
 
-        [Fact]
+        [TestMethod]
         public void ToString_DelegatesToValueToString_ForValueTypes()
         {
             var n = new Node<int>(123);
-            Assert.Equal("123", n.ToString());
+            Assert.AreEqual<string>("123", n.ToString());
         }
 
-        [Fact]
+        [TestMethod]
         public void ToString_HandlesNullableReferenceValue()
         {
             var n = new Node<string?>(null);
-            Assert.Equal(string.Empty, n.ToString());
+            Assert.AreEqual<string>(string.Empty, n.ToString());
         }
 
-        [Fact]
+        [TestMethod]
         public void Next_HasPrivateSetter()
         {
             var n = new Node<int>(1);
-            Assert.Same(n, n.Next);
+            Assert.AreSame(n, n.Next);
         }
     }
 }
