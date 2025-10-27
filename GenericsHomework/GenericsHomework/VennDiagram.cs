@@ -37,7 +37,15 @@ namespace GenericsHomework
 			return sets.Aggregate((a, b) => a.Intersect(b).ToList());
 		}
 
-		public IEnumerable<T> Union(params string[] names) => throw new NotImplementedException();
-		public IEnumerable<T> Difference(string a, string b) => throw new NotImplementedException();
+		public IEnumerable<T> Union(params string[] names) => 
+			names.Select(Get).Where(c => c is not null).SelectMany(c => c!.Items).Distinct().ToList();
+
+		public IEnumerable<T> Difference(string a, string b)
+		{
+			var ca = Get(a);
+			var cb = Get(b);
+			if (ca is null) return Enumerable.Empty<T>();
+			return cb is null ? ca.Items : ca.Items.Except(cb.Items).ToList();
+		}
 	}
 }
