@@ -17,7 +17,27 @@ namespace GenericsHomework
 
 	public class VennDiagram<T> where T: class
 	{
-		private readonly Dictionsary<string, Circle<T>> _circles = new();
+		private readonly Dictionary<string, Circle<T>> _circles = new();
 		public IEnumerable<Circle<T>> Circles => _circles.Values;
+
+		public Circle<T> AddCircle(string name)
+		{
+			if (_circles.TryGetValue(name, out var existing)) return existing;
+			var c = new Circle<T>(name);
+			_circles[name] = c;
+			return c;
+		}
+
+		public Circle<T>? Get(string name) => _circles.TryGetValue(name, out var c) ? c : null;
+
+		public IEnumerable<T> Intersection(params string[] names)
+		{
+			var sets = names.Select(Get).Where(c => c is not null).Select(c => c!.Items);
+			if (!sets.Any()) return Enumerable.Empty<T>();
+			return sets.Aggregate((a, b) => a.Intersect(b).ToList());
+		}
+
+		public IEnumerable<T> Union(params string[] names) => throw new NotImplementedException();
+		public IEnumerable<T> Difference(string a, string b) => throw new NotImplementedException();
 	}
 }
