@@ -40,8 +40,6 @@
             this.Next = newNode;
         }
 
-
-
         public bool Exists(T value) => throw new NotImplementedException();
         public void Clear() => throw new NotImplementedException();
 
