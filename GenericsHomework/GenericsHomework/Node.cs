@@ -33,7 +33,15 @@
 
 
         /// Stubs for methods to be implemented.
-        public void Append(T value) => throw new NotImplementedException();
+        public void Append(T value)
+        {
+            Node<T> newNode = new Node<T>(value);
+            newNode.Next = this.Next;
+            this.Next = newNode;
+        }
+
+
+
         public bool Exists(T value) => throw new NotImplementedException();
         public void Clear() => throw new NotImplementedException();
 
