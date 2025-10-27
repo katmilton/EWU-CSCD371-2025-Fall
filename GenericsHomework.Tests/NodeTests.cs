@@ -49,8 +49,11 @@ public class NodeTests
         // Arrange
         Node<int> n1 = new Node<int>(10);
 
-        // Act & Assert
-        Assert.ThrowsException<InvalidOperationException>(() => n1.Append(10));
+        // Act
+        void Act() { n1.Append(10); }
+
+        // Assert
+        Assert.ThrowsExactly<InvalidOperationException>(Act);
     }
 
     [TestMethod]
@@ -61,8 +64,11 @@ public class NodeTests
         n1.Append(20);
         n1.Append(30);
 
-        // Act & Assert
-        Assert.ThrowsException<InvalidOperationException>(() => n1.Append(20));
+        // Act
+        void Act() { n1.Append(20); }
+
+        // Assert
+        Assert.ThrowsExactly<InvalidOperationException>(Act);
     }
 
     [TestMethod]
@@ -72,8 +78,11 @@ public class NodeTests
         Node<string?> n1 = new Node<string?>(null);
         n1.Append("x");
 
-        // Act & Assert
-        Assert.ThrowsException<InvalidOperationException>(() => n1.Append(null));
+        // Act
+        void Act() { n1.Append(null); }
+
+        // Assert
+        Assert.ThrowsExactly<InvalidOperationException>(Act);
     }
 
     [TestMethod]

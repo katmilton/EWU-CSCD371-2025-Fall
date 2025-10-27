@@ -1,4 +1,6 @@
-﻿namespace GenericsHomework;
+﻿using System;
+
+namespace GenericsHomework;
 
 ///<summary>
 /// A node that stores a homogenous value of type T and references to other nodes.
@@ -96,4 +98,3 @@ public class Node<T>
     }
 
 }
-
