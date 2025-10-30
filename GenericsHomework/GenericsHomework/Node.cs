@@ -12,8 +12,8 @@ namespace GenericsHomework;
 [SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix", Justification = "Represents a single node, not a collection.")]
 public class Node<T> : ICollection<T>
 {
-    private T _value;
-    private bool _isEmpty;
+    private T _Value;
+    private bool _IsEmpty;
 
     /// <summary>
     /// Initializes a single-node circular list; Next points to this node.
@@ -21,8 +21,8 @@ public class Node<T> : ICollection<T>
     /// </summary>
     public Node(T value)
     {
-        _value = value;
-        _isEmpty = false;
+        _Value = value;
+        _IsEmpty = false;
         Next = this;
     }
 
@@ -36,7 +36,7 @@ public class Node<T> : ICollection<T>
     /// Returns the underlying value's ToString() representation, or empty for null/empty collection.
     /// </summary>
     public override string ToString() =>
-        _isEmpty ? string.Empty : (_value?.ToString() ?? string.Empty);
+        _IsEmpty ? string.Empty : (_Value?.ToString() ?? string.Empty);
 
     /// <summary>
     /// Appends a new node containing the specified value immediately after this node,
@@ -52,10 +52,10 @@ public class Node<T> : ICollection<T>
             throw new InvalidOperationException("Duplicate value not allowed in this circular list.");
         }
 
-        if (_isEmpty)
+        if (_IsEmpty)
         {
-            _value = value;
-            _isEmpty = false;
+            _Value = value;
+            _IsEmpty = false;
             Next = this;
             return;
         }
@@ -82,7 +82,7 @@ public class Node<T> : ICollection<T>
         }
 
         this.Next = this;
-        _isEmpty = true;
+        _IsEmpty = true;
 
         // Garbage Collector note:
         // If nothing outside the linked list still references the removed nodes,
@@ -95,15 +95,15 @@ public class Node<T> : ICollection<T>
     /// </summary>
     public bool Exists(T value)
     {
-        if (_isEmpty) return false;
-        if (object.Equals(this._value, value))
+        if (_IsEmpty) return false;
+        if (object.Equals(this._Value, value))
         {
             return true;
         }
 
         for (Node<T> node = this.Next; !object.ReferenceEquals(node, this); node = node.Next)
         {
-            if (object.Equals(node._value, value))
+            if (object.Equals(node._Value, value))
             {
                 return true;
             }
@@ -119,7 +119,7 @@ public class Node<T> : ICollection<T>
     {
         get
         {
-            if (_isEmpty) return 0;
+            if (_IsEmpty) return 0;
             int count = 1;
             for (Node<T> node = this.Next; !ReferenceEquals(node, this); node = node.Next) count++;
             return count;
@@ -150,8 +150,8 @@ public class Node<T> : ICollection<T>
         ArgumentNullException.ThrowIfNull(array);
         ArgumentOutOfRangeException.ThrowIfNegative(arrayIndex, nameof(arrayIndex));
         if (array.Length - arrayIndex < Count) throw new ArgumentException("The destination array has insufficient space.");
-        if (_isEmpty) return;
-        array[arrayIndex++] = _value;
+        if (_IsEmpty) return;
+        array[arrayIndex++] = _Value;
 
         if (ReferenceEquals(this.Next, this)) return;
         int appendedCount = Count - 1;
@@ -159,7 +159,7 @@ public class Node<T> : ICollection<T>
 
         for (Node<T> node = this.Next; !ReferenceEquals(node, this); node = node.Next)
         {
-            array[writeIndex--] = node._value;
+            array[writeIndex--] = node._Value;
         }
     }
 
@@ -170,19 +170,19 @@ public class Node<T> : ICollection<T>
     /// <returns>true if the item was found and removed; otherwise, false.</returns>
     public bool Remove(T item)
     {
-        if (_isEmpty) return false;
+        if (_IsEmpty) return false;
         // Special case: removing the head node
-        if (object.Equals(this._value, item))
+        if (object.Equals(this._Value, item))
         {
             if (ReferenceEquals(this.Next, this))
             {
                 // Only one node in the list
-                _isEmpty = true;
+                _IsEmpty = true;
                 return true;
             }
 
             var removed = this.Next;
-            _value = removed._value;
+            _Value = removed._Value;
             Next = removed.Next;
             return true;
           
@@ -191,7 +191,7 @@ public class Node<T> : ICollection<T>
         Node<T> current = this.Next;
         while (!ReferenceEquals(current, this))
         {
-            if (object.Equals(current._value, item))
+            if (object.Equals(current._Value, item))
             {
                 previous.Next = current.Next;
                 current.Next = current;
@@ -214,11 +214,11 @@ public class Node<T> : ICollection<T>
    
     public IEnumerator<T> GetEnumerator()
     {
-        if (_isEmpty) yield break;
-        yield return _value;
+        if (_IsEmpty) yield break;
+        yield return _Value;
         for (Node<T> node = this.Next; !ReferenceEquals(node, this); node = node.Next)
         {
-            yield return node._value;
+            yield return node._Value;
         }
     }
 
