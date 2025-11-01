@@ -33,4 +33,19 @@ public sealed class ProgramTests
         Assert.AreEqual<string?>("hello", read1);
         Assert.AreEqual<string?>(null, read2);
     }
+
+    [TestMethod]
+    public void DefaultConstructor_WiresDelegatesToConsoleMethods_Success()
+    {
+        // Arrange
+        var program = new Program();
+
+        // Act
+        var writeMethodType = program.WriteLine.Method.DeclaringType;
+        var readMethodType = program.ReadLine.Method.DeclaringType;
+
+        // Assert
+        Assert.AreEqual<Type>(typeof(Console), writeMethodType);
+        Assert.AreEqual<Type>(typeof(Console), readMethodType);
+    }
 }
