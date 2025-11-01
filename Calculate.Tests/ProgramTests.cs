@@ -48,4 +48,18 @@ public sealed class ProgramTests
         Assert.AreEqual<Type>(typeof(Console), writeMethodType);
         Assert.AreEqual<Type>(typeof(Console), readMethodType);
     }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentNullException))]
+    public void Constructor_ThrowsWhenWriteLineIsNull_Success()
+    {
+        _ = new Program(null!, () => "input");
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentNullException))]
+    public void Constructor_ThrowsWhenReadLineIsNull_Success()
+    {
+        _ = new Program(s => {}, null!);
+    }
 }
