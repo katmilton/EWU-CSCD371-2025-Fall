@@ -8,7 +8,7 @@ using System.Security;
 namespace Calculate.Tests;
 
 [TestClass]
-public sealed class ProgramTests
+public class ProgramTests
 {
     [TestMethod]
     public void Properties_CanBeSetAtConstructionInvokedCorrectly_Success()
