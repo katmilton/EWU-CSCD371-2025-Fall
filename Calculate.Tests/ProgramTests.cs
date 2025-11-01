@@ -62,4 +62,37 @@ public sealed class ProgramTests
     {
         _ = new Program(s => {}, null!);
     }
+
+    [TestMethod]
+    public void Run_ReturnsNonZeroWhenEndOfInputOccurs_Success()
+    {
+        // Arrange
+        var linesWritten = new List<string?>();
+        var inputs = new Queue<string?>(new string?[] { null });
+
+        var program = new Program(linesWritten.Add, () => inputs.Dequeue());
+
+        // Act
+        var exitCode = program.Run();
+
+        // Assert
+        Assert.AreEqual<int>(1, exitCode);
+    }
+
+    [TestMethod]
+    public void Run_QuitsWhenUserEntersQ_Success()
+    {
+        // Arrange
+        var outputs = new List<string?>();
+        var inputs = new Queue<string?>(new[] { "q" });
+
+        var program = new Program(outputs.Add, () => inputs.Dequeue());
+
+        // Act
+        var exitCode = program.Run();
+
+        // Assert
+        Assert.AreEqual<int>(0, exitCode);
+        Assert.IsTrue(outputs.Any(o => o!.Contains("Enter an expression", StringComparison.OrdinalIgnoreCase)));
+    }
 }
