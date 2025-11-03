@@ -6,9 +6,9 @@ public class Program
 {
     /// <summary>
     /// Delegate for writing a line of text. Defaults to Console.WriteLine.
-    /// Exposing WriteLine as an Actionallows us to redirect output for testing.
+    /// Exposing WriteLine as an Action allows us to redirect output for testing.
     /// Rather than writing directly to the console, we can capture output in memory, 
-    /// enabling automated verifiction.
+    /// enabling automated verification.
     /// </summary>
     public Action<string?> WriteLine { get; init; }
 
@@ -54,7 +54,7 @@ public class Program
     /// <returns>0 for normal exit, non-zero for abnormal termination.</returns>
     public int Run()
     {
-        var Caluclator = new Calculator();
+        Calculator calc = new Calculator();
 
         while (true)
         {
@@ -62,12 +62,12 @@ public class Program
             var input = ReadLine();
 
             if (input is null)
-                return 1; // Indicate abnormal termination due to null input
+                return 1; 
 
             if (string.Equals(input, "q", StringComparison.OrdinalIgnoreCase))
                 break;
 
-            if (Calculator.TryCalculate(input, out var result))
+            if (calc.TryCalculate(input, out var result))
                 WriteLine($"{input} = {result}");
             else
                 WriteLine("Invalid input. Please include spaces around the operator and use integers.");

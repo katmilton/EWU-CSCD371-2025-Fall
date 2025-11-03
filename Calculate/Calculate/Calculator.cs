@@ -24,18 +24,46 @@ public class Calculator
     public static int Divide(int a, int b) => a / b;
 
 
-    /// <summary>
-    /// Using "TryParse" pattern to attempt to calculate the result of a mathematical expression.
-    /// Valid calculation expression include such strings as "3 + 4" or "10 / 2" etc.
-    /// If there is no whitespace around the operator or if the operands are not integers, you can assume the calculation is invalid and return false.
-    /// Use string.Split(), pattern matching, logical and operators to parse the string in their entirety.
-    /// Index into the MathematicalOperations method using the operator parsed during pattern matching to find the corresponding implementation and invoke it.
-    /// </summary>
-    public static bool TryCalculate(string expression, out int result)
+    public bool TryCalculate(string expression, out int result)
     {
-        // Placeholder so Program.cs compiles and tests can run.
-        // Please replace entirely.
-        result = default;
-        return false;
+        result = 0;
+
+        if (string.IsNullOrWhiteSpace(expression))
+        {
+            return false;
+        }
+
+        string[] splitExp = expression.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (splitExp.Length != 3)
+        {
+            return false;
+        }
+
+        if (splitExp[1].Length != 1)
+        {
+            return false;
+        }
+        char op = splitExp[1][0];
+
+        bool leftParsed = int.TryParse(splitExp[0], out int left);
+        bool rightParsed = int.TryParse(splitExp[2], out int right);
+        
+        if (!leftParsed || !rightParsed)
+        {
+            return false;
+        }
+
+        if (op == '/' && right == 0)
+        {
+            return false;
+        }
+
+        if (!MathematicalOperations.TryGetValue(op, out var operation))
+        {
+            return false;
+        }
+
+        result = operation(left, right);
+        return true;
     }
 }

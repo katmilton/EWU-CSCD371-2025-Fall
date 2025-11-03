@@ -1,9 +1,7 @@
-using Calculate;
+﻿using Calculate;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security;
 
 
 namespace Calculate.Tests;
@@ -13,7 +11,7 @@ public class CalculatorTests
 {
 
     [TestMethod]
-    public void Calculator_Add_TwoPositiveIntegers_ReturnsSum()
+    public void Add_TwoPositiveIntegers_ReturnsSum()
     {
         // Arrange
         int a = 2;
@@ -27,7 +25,7 @@ public class CalculatorTests
     }
 
     [TestMethod]
-    public void Calculator_Subtract_NegativeResult_ReturnsDifference()
+    public void Subtract_NegativeResult_ReturnsDifference()
     {
         // Arrange
         int a = 5;
@@ -41,7 +39,7 @@ public class CalculatorTests
     }
 
     [TestMethod]
-    public void Calculator_Multiply_WithZero_ReturnsZero()
+    public void Multiply_WithZero_ReturnsZero()
     {
         // Arrange
         int a = 20;
@@ -55,7 +53,7 @@ public class CalculatorTests
     }
 
     [TestMethod]
-    public void Calculator_Divide_WithEvenDivision_ReturnsQuotient()
+    public void Divide_WithEvenDivision_ReturnsQuotient()
     {
         // Arrange
         int a = 10;
@@ -65,12 +63,12 @@ public class CalculatorTests
         int result = Calculator.Divide(a, b);
 
         // Assert
-        Assert.AreEqual<int>(3, result);
+        Assert.AreEqual<int>(2, result);
     }
 
     [TestMethod]
     [ExpectedException(typeof(DivideByZeroException))]
-    public void Calculator_Divide_ByZero_ThrowsDivideByZeroException()
+    public void Divide_ByZero_ThrowsDivideByZeroException()
     {
         // Arrange
         int a = 12;
@@ -83,15 +81,12 @@ public class CalculatorTests
     }
 
     [TestMethod]
-    public void Calculator_MathematicalOperations_HasFourOperators_MapsToExpectedMethods()
+    public void MathematicalOperations_HasFourOperators_MapsToExpectedMethods()
     {
         // Arrange
-        Calculator calc = new Calculator();
+        IReadOnlyDictionary<char, Func<int, int, int>> map = new Calculator().MathematicalOperations;
 
-        // Act
-        IReadOnlyDictionary<char, Func<int, int, int>> map = calc.MathematicalOperations;
-
-        // Assert
+        // Act / Assert
         Assert.AreEqual<int>(4, map.Count);
         Assert.AreEqual<bool>(true, map.ContainsKey('+'));
         Assert.AreEqual<bool>(true, map.ContainsKey('-'));
@@ -100,11 +95,10 @@ public class CalculatorTests
     }
 
     [TestMethod]
-    public void Calculator_MathematicalOperations_InvokeAdd_PerformsAddition()
+    public void MathematicalOperations_InvokeAdd_PerformsAddition()
     {
         // Arrange
-        Calculator calc = new Calculator();
-        Func<int, int, int> add = calc.MathematicalOperations['+'];
+        Func<int, int, int> add = new Calculator().MathematicalOperations['+'];
 
         // Act
         int result = add(6, 14);
@@ -114,11 +108,10 @@ public class CalculatorTests
     }
 
     [TestMethod]
-    public void Calculator_MathematicalOperations_InvokeEachOperator_PerformsCorrectOperation()
+    public void MathematicalOperations_InvokeEachOperator_PerformsCorrectOperation()
     {
         // Arrange
-        Calculator calc = new Calculator();
-        IReadOnlyDictionary<char, Func<int, int, int>> map = calc.MathematicalOperations;
+        IReadOnlyDictionary<char, Func<int, int, int>> map = new Calculator().MathematicalOperations;
 
         // Act
         int sum = map['+'](2, 9);
@@ -133,5 +126,107 @@ public class CalculatorTests
         Assert.AreEqual<int>(3, quot);
     }
 
+    [TestMethod]
+    public void TryCalculate_NegativeNumbers_ReturnsTrue()
+    {
+        // Arrange
+        Calculator calc = new Calculator();
+        string input = "-8 - -3";
+
+        // Act
+        bool ok = calc.TryCalculate(input, out int result);
+
+        // Assert
+        Assert.AreEqual<bool>(true, ok);
+    }
+
+    [TestMethod]
+    public void TryCalculate_NegativeNumbers_ReturnsCorrectResult()
+    {
+        // Arrange
+        Calculator calc = new Calculator();
+        string input = "-8 - -3";
+
+        // Act
+        bool ok = calc.TryCalculate(input, out int result);
+
+        // Assert
+        Assert.AreEqual<int>(-5, result);
+    }
+
+    [TestMethod]
+    public void TryCalculate_ValidAddition_WithSpaces_ReturnsTrueAndSum()
+    {
+        // Arrange
+        Calculator calc = new Calculator();
+        string input = "3 + 4";
+
+        // Act
+        bool ok = calc.TryCalculate(input, out int result);
+
+        // Assert
+        Assert.AreEqual<bool>(true, ok);
+        Assert.AreEqual<int>(7, result);
+    }
+
+    [TestMethod]
+    public void TryCalculate_NoSpacesAroundOperator_ReturnsFalseAndDefault()
+    {
+        // Arrange
+        Calculator calc = new Calculator();
+        string input = "3+4";
+
+        // Act
+        bool ok = calc.TryCalculate(input, out int result);
+
+        // Assert
+        Assert.AreEqual<bool>(false, ok);
+        Assert.AreEqual<int>(0, result);
+    }
+
+    [TestMethod]
+    public void TryCalculate_NonIntegerOperands_ReturnsFalseAndDefault()
+    {
+        // Arrange
+        Calculator calc = new Calculator();
+        string input = "x + y";
+
+        // Act
+        bool ok = calc.TryCalculate(input, out int result);
+
+        // Assert
+        Assert.AreEqual<bool>(false, ok);
+        Assert.AreEqual<int>(0, result);
+    }
+
+    [TestMethod]
+    public void TryCalculate_UnknownOperator_ReturnsFalseAndDefault()
+    {
+        // Arrange
+        Calculator calc = new Calculator();
+        string input = "3 ^ 4";
+
+        // Act
+        bool ok = calc.TryCalculate(input, out int result);
+
+        // Assert
+        Assert.AreEqual<bool>(false, ok);
+        Assert.AreEqual<int>(0, result);
+    }
+
+    [TestMethod]
+    public void TryCalculate_DivideByZero_ReturnsFalseAndDefault()
+    {
+        // Arrange
+        Calculator calc = new Calculator();
+        string input = "10 / 0";
+
+        // Act
+        bool ok = calc.TryCalculate(input, out int result);
+
+        // Assert
+        Assert.AreEqual<bool>(false, ok);
+        Assert.AreEqual<int>(0, result);
+    }
 
 }
