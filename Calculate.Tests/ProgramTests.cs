@@ -208,4 +208,30 @@ public class ProgramTests
         Assert.AreEqual<int>(0, exitCode);
         Assert.IsTrue(outputs.Any(o => o!.Contains("Invalid input", StringComparison.OrdinalIgnoreCase)));
     }
+
+    [TestMethod]
+    public void Main_EntryPointReadsAndRunsUntilQuit_Success()
+    {
+        // Arrange
+        var originalIn = Console.In;
+        var originalOut = Console.Out;
+        try
+        {
+            Console.SetIn(new StringReader("q" + Environment.NewLine));
+            var sw = new StringWriter();
+            Console.SetOut(sw);
+
+            // Act
+            Program.Main();
+
+            // Assert
+            var stdout = sw.ToString();
+            StringAssert.Contains(stdout, "Enter an expression");
+        }
+        finally
+        {
+            Console.SetIn(originalIn);
+            Console.SetOut(originalOut);
+        }
+    }
 }
