@@ -8,24 +8,29 @@ using System.Numerics;
 
 namespace Calculate;
 
-public static class Calculator<T> where T : INumber<T>
+public sealed class Calculator<T> where T : INumber<T>
 {
 
-    public static T Add(T a, T b) => a + b;
-    public static T Subtract(T a, T b) => a - b;
-    public static T Multiply(T a, T b) => a * b;
-    public static T Divide(T a, T b) => a / b;
-
-    public static IReadOnlyDictionary<char, Func<T, T, T>> MathematicalOperations { get; }
-        = new Dictionary<char, Func<T, T, T>>
+    public IReadOnlyDictionary<char, Func<T, T, T>> MathematicalOperations { get; }
+    
+    public Calculator()
     {
-        ['+'] = Add,
-        ['-'] = Subtract,
-        ['*'] = Multiply,
-        ['/'] = Divide
-    };
+        MathematicalOperations = new Dictionary<char, Func<T, T, T>>
+        {
+            ['+'] = (a, b) => a + b,
+            ['-'] = (a, b) => a - b,
+            ['*'] = (a, b) => a * b,
+            ['/'] = (a, b) => a / b
+        };
+     
+    }
 
-    public static bool TryCalculate(string? input, out T result)
+    public T Add(T a, T b) => a + b;
+    public T Subtract(T a, T b) => a - b;
+    public T Multiply(T a, T b) => a * b;
+    public T Divide(T a, T b) => a / b;
+
+    public bool TryCalculate(string? input, out T result)
     {
         result = T.Zero;
         if (string.IsNullOrWhiteSpace(input)) return false;

@@ -232,35 +232,39 @@ public class CalculatorTests
     [TestMethod]
     public void GenericCalculator_DoubleAdds_Success()
     {
-        Assert.IsTrue(Calculator<double>.TryCalculate("5.5 + 4.5", out double result));
+        var calc = new Calculate.Calculator<double>();
+        Assert.IsTrue(calc.TryCalculate("5.5 + 4.5", out var result));
         Assert.AreEqual<double>(10.0, result);
     }
 
     [TestMethod]
     public void GenericCalculator_DecimalMultiplies_Success()
     {
-        Assert.IsTrue(Calculator<decimal>.TryCalculate("2.5 * 4.0", out decimal result));
+        var calc = new Calculate.Calculator<decimal>();
+        Assert.IsTrue(calc.TryCalculate("2.5 * 4.0", out decimal result));
         Assert.AreEqual<decimal>(10.0m, result);
     }
 
     [TestMethod]
     public void GenericCalculator_FloatDivides_Success()
     {
-        Assert.IsTrue(Calculator<float>.TryCalculate("9.0 / 3.0", out float result));
+        var calc = new Calculate.Calculator<float>();
+        Assert.IsTrue(calc.TryCalculate("9.0 / 3.0", out float result));
         Assert.AreEqual<float>(3.0f, result);
     }
 
     [TestMethod]
     public void GenericCalculator_LongSubtracts_Success()
     {
-        Assert.IsTrue(Calculator<long>.TryCalculate("20 - 7", out long result));
+        var calc = new Calculate.Calculator<long>();
+        Assert.IsTrue(calc.TryCalculate("20 - 7", out long result));
         Assert.AreEqual<long>(13, result);
     }
 
     [TestMethod]
     public void GenericCalculator_DivideByZero_Fails()
     {
-        Assert.IsFalse(Calculator<double>.TryCalculate("5.0 / 0.0", out double result));
-
+        var calc = new Calculate.Calculator<int>();
+        Assert.IsFalse(calc.TryCalculate("5.0 / 0.0", out var result));
     }
 }
