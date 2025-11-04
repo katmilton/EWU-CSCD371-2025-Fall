@@ -10,6 +10,18 @@ namespace Calculate.Tests;
 [TestClass]
 public class ProgramTests
 {
+    private static readonly string?[] Quit = new[] { "q" };
+    private static readonly string?[] QuitUpper = new[] { "Q" };
+    private static readonly string?[] EofOnly = new string?[] { null };
+    private static readonly string?[] EmptyThenQuit = new string?[] { "", "q" };
+
+    private static readonly string?[] AddThenQuit = new[] { "3 + 4", "q" };
+    private static readonly string?[] TwoOpsThenQuit = new[] { "3 + 4", "3 - 1", "q" };
+
+    private static readonly string?[] NoSpacesThenQuit = new[] { "3+4", "q" };
+    private static readonly string?[] UnknownOpThenQuit = new[] { "3 ^ 2", "q" };
+    private static readonly string?[] DivZeroThenQuit = new[] { "1 / 0", "q" };
+
     [TestMethod]
     public void Properties_CanBeSetAtConstructionInvokedCorrectly_Success()
     {
@@ -68,7 +80,7 @@ public class ProgramTests
     {
         // Arrange
         var linesWritten = new List<string?>();
-        var inputs = new Queue<string?>(new string?[] { null });
+        var inputs = new Queue<string?>(EofOnly);
 
         var program = new Program(linesWritten.Add, () => inputs.Dequeue());
 
@@ -84,7 +96,7 @@ public class ProgramTests
     {
         // Arrange
         var outputs = new List<string?>();
-        var inputs = new Queue<string?>(new[] { "q" });
+        var inputs = new Queue<string?>(Quit);
 
         var program = new Program(outputs.Add, () => inputs.Dequeue());
 
@@ -101,7 +113,7 @@ public class ProgramTests
     {
         // Arrange
         var outputs = new List<string?>();
-        var inputs = new Queue<string?>(new[] { "Q" });
+        var inputs = new Queue<string?>(QuitUpper);
         var program = new Program(outputs.Add, () => inputs.Dequeue());
 
         // Act
@@ -117,7 +129,7 @@ public class ProgramTests
     {
         // Arrange
         var outputs = new List<string?>();
-        var inputs = new Queue<string?>(new[] { "3 + 4", "q" });
+        var inputs = new Queue<string?>(AddThenQuit);
         var program = new Program(outputs.Add, () => inputs.Dequeue());
 
         // Act
@@ -133,7 +145,7 @@ public class ProgramTests
     {
         // Arrange
         var outputs = new List<string?>();
-        var inputs = new Queue<string?>(new[] { "3+4", "q" });
+        var inputs = new Queue<string?>(NoSpacesThenQuit);
         var program = new Program(outputs.Add, () => inputs.Dequeue());
 
         // Act
@@ -149,7 +161,7 @@ public class ProgramTests
     {
         // Arrange
         var outputs = new List<string?>();
-        var inputs = new Queue<string?>(new[] { "5 ^ 2", "q" });
+        var inputs = new Queue<string?>(UnknownOpThenQuit);
         var program = new Program(outputs.Add, () => inputs.Dequeue());
 
         // Act
@@ -165,7 +177,7 @@ public class ProgramTests
     {
         // Arrange
         var outputs = new List<string?>();
-        var inputs = new Queue<string?>(new[] { "10 / 0", "q" });
+        var inputs = new Queue<string?>(DivZeroThenQuit);
         var program = new Program(outputs.Add, () => inputs.Dequeue());
 
         // Act
@@ -181,7 +193,7 @@ public class ProgramTests
     {
         // Arrange
         var outputs = new List<string?>();
-        var inputs = new Queue<string?>(new[] { "1 + 1", "2 * 2", "q" });
+        var inputs = new Queue<string?>(TwoOpsThenQuit);
         var program = new Program(outputs.Add, () => inputs.Dequeue());
 
         // Act
@@ -198,7 +210,7 @@ public class ProgramTests
     {
         // Arrange
         var outputs = new List<string?>();
-        var inputs = new Queue<string?>(new[] { "", "q" });
+        var inputs = new Queue<string?>(EmptyThenQuit);
         var program = new Program(outputs.Add, () => inputs.Dequeue());
 
         // Act
