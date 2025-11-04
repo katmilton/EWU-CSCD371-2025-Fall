@@ -95,4 +95,117 @@ public class ProgramTests
         Assert.AreEqual<int>(0, exitCode);
         Assert.IsTrue(outputs.Any(o => o!.Contains("Enter an expression", StringComparison.OrdinalIgnoreCase)));
     }
+
+    [TestMethod]
+    public void Run_QuitUppercaseQ_Success()
+    {
+        // Arrange
+        var outputs = new List<string?>();
+        var inputs = new Queue<string?>(new[] { "Q" });
+        var program = new Program(outputs.Add, () => inputs.Dequeue());
+
+        // Act
+        var exitCode = program.Run();
+
+        // Assert
+        Assert.AreEqual<int>(0, exitCode);
+        Assert.IsTrue(outputs.Any(o => o!.Contains("Enter an expression", StringComparison.OrdinalIgnoreCase)));
+    }
+
+    [TestMethod]
+    public void Run_CalculatesValidExpression_Success()
+    {
+        // Arrange
+        var outputs = new List<string?>();
+        var inputs = new Queue<string?>(new[] { "3 + 4", "q" });
+        var program = new Program(outputs.Add, () => inputs.Dequeue());
+
+        // Act
+
+        var exitCode = program.Run();
+        // Assert
+        Assert.AreEqual<int>(0, exitCode);
+        Assert.IsTrue(outputs.Any(o => o!.Contains("3 + 4 = 7", StringComparison.Ordinal)));
+    }
+
+    [TestMethod]
+    public void Run_HandlesInvalidInput_Success()
+    {
+        // Arrange
+        var outputs = new List<string?>();
+        var inputs = new Queue<string?>(new[] { "3+4", "q" });
+        var program = new Program(outputs.Add, () => inputs.Dequeue());
+
+        // Act
+        var exitCode = program.Run();
+
+        // Assert
+        Assert.AreEqual<int>(0, exitCode);
+        Assert.IsTrue(outputs.Any(o => o!.Contains("Invalid input", StringComparison.OrdinalIgnoreCase)));
+    }
+
+    [TestMethod]
+    public void Run_UnknownOperatorInput_HandlesGracefully()
+    {
+        // Arrange
+        var outputs = new List<string?>();
+        var inputs = new Queue<string?>(new[] { "5 ^ 2", "q" });
+        var program = new Program(outputs.Add, () => inputs.Dequeue());
+
+        // Act
+        var exitCode = program.Run();
+
+        // Assert
+        Assert.AreEqual<int>(0, exitCode);
+        Assert.IsTrue(outputs.Any(o => o!.Contains("Invalid input", StringComparison.OrdinalIgnoreCase)));
+    }
+
+    [TestMethod]
+    public void Run_DivisionByZeroInput_HandlesGracefully()
+    {
+        // Arrange
+        var outputs = new List<string?>();
+        var inputs = new Queue<string?>(new[] { "10 / 0", "q" });
+        var program = new Program(outputs.Add, () => inputs.Dequeue());
+
+        // Act
+        var exitCode = program.Run();
+
+        // Assert
+        Assert.AreEqual<int>(0, exitCode);
+        Assert.IsTrue(outputs.Any(o => o!.Contains("Invalid input", StringComparison.OrdinalIgnoreCase)));
+    }
+
+    [TestMethod]
+    public void Run_ShowsPromptEachIteration_Success()
+    {
+        // Arrange
+        var outputs = new List<string?>();
+        var inputs = new Queue<string?>(new[] { "1 + 1", "2 * 2", "q" });
+        var program = new Program(outputs.Add, () => inputs.Dequeue());
+
+        // Act
+        var exitCode = program.Run();
+
+        // Assert
+        Assert.AreEqual<int>(0, exitCode);
+        int promptCount = outputs.Count(o => o != null && o!.Contains("Enter an expression", StringComparison.OrdinalIgnoreCase));
+        Assert.AreEqual<int>(3, promptCount);
+    }
+
+    [TestMethod]
+    public void Run_EmptyLineTreatedAsInvalidInput_Success()
+    {
+        // Arrange
+        var outputs = new List<string?>();
+        var inputs = new Queue<string?>(new[] { "", "q" });
+        var program = new Program(outputs.Add, () => inputs.Dequeue());
+
+        // Act
+        var exitCode = program.Run();
+
+        // Assert
+        Assert.AreEqual<int>(0, exitCode);
+        Assert.IsTrue(outputs.Any(o => o!.Contains("Invalid input", StringComparison.OrdinalIgnoreCase)));
+    }
 }
