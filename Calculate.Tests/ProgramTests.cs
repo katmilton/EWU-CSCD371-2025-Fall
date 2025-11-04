@@ -47,18 +47,30 @@ public class ProgramTests
     }
 
     [TestMethod]
-    public void DefaultConstructor_WiresDelegatesToConsoleMethods_Success()
+    public void DefaultConstructor_WritesAndReadsConsoleBehavior_Success()
     {
-        // Arrange
-        var program = new Program();
+        var originalIn = Console.In;
+        var originalOut = Console.Out;
+        try
+        {
+            // Arrange
+            Console.SetIn(new StringReader("q" + Environment.NewLine));
+            var sw = new StringWriter();
+            Console.SetOut(sw);
 
-        // Act
-        var writeMethodType = program.WriteLine.Method.DeclaringType;
-        var readMethodType = program.ReadLine.Method.DeclaringType;
+            // Act
+            var program = new Program();
+            var exit = program.Run();
 
-        // Assert
-        Assert.AreEqual<Type>(typeof(Console), writeMethodType);
-        Assert.AreEqual<Type>(typeof(Console), readMethodType);
+            // Assert
+            Assert.AreEqual<int>(0, exit);
+            StringAssert.Contains(sw.ToString(), "Enter an expression");
+        }
+        finally
+        {
+            Console.SetIn(originalIn);
+            Console.SetOut(originalOut);
+        }
     }
 
     [TestMethod]

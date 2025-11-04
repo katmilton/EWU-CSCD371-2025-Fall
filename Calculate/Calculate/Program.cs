@@ -1,49 +1,17 @@
-﻿using System;
+﻿using ConsoleUtilities;
+using System;
 
 namespace Calculate;
 
-public class Program
+public class Program : ProgramBase
 {
-    /// <summary>
-    /// Delegate for writing a line of text. Defaults to Console.WriteLine.
-    /// Exposing WriteLine as an Action allows us to redirect output for testing.
-    /// Rather than writing directly to the console, we can capture output in memory, 
-    /// enabling automated verification.
-    /// </summary>
-    public Action<string?> WriteLine { get; init; }
 
-    /// <summary>
-    /// Delegate for reading a line of text. Defaults to Console.ReadLine.
-    /// Using a Func for input lets us replace Console.ReadLine with a stub or mock sequence in tests.
-    /// This removes the need for user input during execution.
-    /// </summary>
-    public Func<string?> ReadLine { get; init; }
+    private readonly Calculator _calc = new();
 
-    /// <summary>
-    /// Default constructor.
-    /// Initializes delegates to Console methods.
-    /// This ensures the application works normally when run from the command line,
-    /// but still allows the delegates to be overridden for testing.
-    /// </summary>
-    public Program()
-    {
-        WriteLine = Console.WriteLine;
-        ReadLine = Console.ReadLine;
-    }
+    public Program() : base() { }
 
-    /// <summary>
-    /// Constructor allowing custom delegates for input and output.
-    /// This enables dependency injection at construction time.
-    /// This pattern supports unit testing and reuse in other contexts
-    /// where you may want to replace console input/output with alternative mechanisms.
-    /// </summary>
-    /// <param name="writeLine">Delegate for output; must not be null.</param>
-    /// <param name="readLine">Delegate for input; must not be null.</param>
     public Program(Action<string?> writeLine, Func<string?> readLine)
-    {
-        WriteLine = writeLine ?? throw new ArgumentNullException(nameof(writeLine));
-        ReadLine = readLine ?? throw new ArgumentNullException(nameof(readLine));
-    }
+        : base(writeLine, readLine) { }
 
     /// <summary>
     /// Runs the main calculator loop, reading expressions and displayng results.
@@ -54,26 +22,21 @@ public class Program
     /// <returns>0 for normal exit, non-zero for abnormal termination.</returns>
     public int Run()
     {
-        Calculator calc = new Calculator();
-
         while (true)
         {
             WriteLine("Enter an expression like \"3 + 4\" (or 'q' to quit):");
             var input = ReadLine();
 
             if (input is null)
-                return 1; 
+                return 1;
 
-            if (string.Equals(input, "q", StringComparison.OrdinalIgnoreCase))
-                break;
+            if (string.Equals(input, "q", StringComparison.OrdinalIgnoreCase)) return 0;
 
-            if (calc.TryCalculate(input, out var result))
+            if (_calc.TryCalculate(input, out var result))
                 WriteLine($"{input} = {result}");
             else
                 WriteLine("Invalid input. Please include spaces around the operator and use integers.");
         }
-
-        return 0;
     }
 
     /// <summary>
@@ -81,9 +44,5 @@ public class Program
     /// Keeps Main minimal by instantiating Program with default console delegates.
     /// This separation simplifies testing and aligns with the Single Responsibility Principle.
     /// </summary>
-    public static void Main()
-    {
-        var program = new Program();
-        program.Run();
-    }
+    public static void Main() => new Program().Run();
 }
