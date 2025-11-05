@@ -14,7 +14,7 @@ public class Program : ProgramBase
         : base(writeLine, readLine) { }
 
     /// <summary>
-    /// Runs the main calculator loop, reading expressions and displayng results.
+    /// Runs the main calculator loop, reading expressions and displaying results.
     /// Encapsulating the interaction logic in a method makes it easier to test
     /// the logic directly without launching a separate process.
     /// It returns an integer so tests can assert exit codes or termination conditions.
