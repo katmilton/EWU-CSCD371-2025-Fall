@@ -3,6 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Security;
+using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Assignment.Tests;
@@ -85,16 +88,50 @@ public class PingProcessTests
 
 
     [TestMethod]
-    //[ExpectedException(typeof(AggregateException))]
+    //[ExpectedException(typeof(AggregateException))] <- Has been deprecated
     public void RunAsync_UsingTplWithCancellation_CatchAggregateExceptionWrapping()
     {
+        CancellationTokenSource token = new();
+        token.Cancel();
+
+        try
+        {
+            Task<PingResult> task = Sut.RunAsync("localhost", token.Token);
+            task.Wait();
+
+        }
+        catch (AggregateException ex)
+        {
+
+            Assert.IsInstanceOfType(ex, typeof(AggregateException));
+            return;
+
+        }
+
+        Assert.Fail("Expected Aggregate Exception, but none was thrown");
         
     }
 
     [TestMethod]
-   //[ExpectedException(typeof(TaskCanceledException))]
+   //[ExpectedException(typeof(TaskCanceledException))] <- has been deprecated
     public void RunAsync_UsingTplWithCancellation_CatchAggregateExceptionWrappingTaskCanceledException()
     {
+        CancellationTokenSource token = new();
+        token.Cancel();
+
+        try {
+            Task<PingResult> task = Sut.RunAsync("localhost", token.Token);
+            task.Wait();
+
+        }
+        catch(AggregateException ex) {
+
+            bool exception = ex.Flatten().InnerExceptions.Any(e => e is TaskCanceledException);
+            Assert.IsTrue(exception);
+            return;
+        }
+
+        Assert.Fail("Expected Aggregate Exception, but none was thrown");
         // Use exception.Flatten()
     }
 

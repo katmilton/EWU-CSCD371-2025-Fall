@@ -49,11 +49,13 @@ public class PingProcess
             (stringBuilder ??= new StringBuilder()).AppendLine(line);
 
         Process process = await Task.Run(() =>
-            RunProcessInternal(StartInfo, updateStdOutput, default, cancellationToken),
-            cancellationToken);
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return RunProcessInternal(StartInfo, updateStdOutput, default, cancellationToken);
+
+        }, cancellationToken);
 
         return new PingResult(process.ExitCode, stringBuilder?.ToString());
-
     }
 
     async public Task<PingResult> RunAsync(params string[] hostNameOrAddresses)
