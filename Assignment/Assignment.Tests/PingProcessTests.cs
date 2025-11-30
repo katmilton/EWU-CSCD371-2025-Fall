@@ -80,7 +80,6 @@ public class PingProcessTests
     [TestMethod]
     async public Task RunAsync_UsingTpl_Success()
     {
-        // DO use async/await in this test.
         Task<PingResult> task = Sut.RunAsync("localhost");
         PingResult result =  await task;
         AssertValidPingOutput(result);
@@ -88,7 +87,6 @@ public class PingProcessTests
 
 
     [TestMethod]
-    //[ExpectedException(typeof(AggregateException))] <- Has been deprecated
     public void RunAsync_UsingTplWithCancellation_CatchAggregateExceptionWrapping()
     {
         CancellationTokenSource token = new();
@@ -113,7 +111,6 @@ public class PingProcessTests
     }
 
     [TestMethod]
-   //[ExpectedException(typeof(TaskCanceledException))] <- has been deprecated
     public void RunAsync_UsingTplWithCancellation_CatchAggregateExceptionWrappingTaskCanceledException()
     {
         CancellationTokenSource token = new();
@@ -132,29 +129,69 @@ public class PingProcessTests
         }
 
         Assert.Fail("Expected Aggregate Exception, but none was thrown");
-        // Use exception.Flatten()
     }
 
     [TestMethod]
     async public Task RunAsync_MultipleHostAddresses_True()
     {
-        // Pseudo Code - don't trust it!!!
-        string[] hostNames = new string[] { "localhost", "localhost", "localhost", "localhost" };
-        int expectedLineCount = PingOutputLikeExpression.Split(Environment.NewLine).Length*hostNames.Length;
+        string[] hostNames = new[] { "localhost", "localhost", "localhost", "localhost" };
+
+        PingResult single = Sut.Run("localhost");
+        int linesPerPing = single.StdOutput?
+            .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
+            .Length ?? 0;
+
+        int expectedLineCount = linesPerPing * hostNames.Length;
+
         PingResult result = await Sut.RunAsync(hostNames);
-        int? lineCount = result.StdOutput?.Split(Environment.NewLine).Length;
-        Assert.AreEqual(expectedLineCount, lineCount);
+        int actualLineCount = result.StdOutput?
+            .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
+            .Length ?? 0;
+
+        Assert.AreEqual(expectedLineCount, actualLineCount, $"Expected {expectedLineCount} lines but got {actualLineCount}.");
     }
 
     [TestMethod]
-#pragma warning disable CS1998 // Remove this
     async public Task RunLongRunningAsync_UsingTpl_Success()
     {
-        PingResult result = default;
-        // Test Sut.RunLongRunningAsync("localhost");
+        PingResult result = await Sut.RunLongRunningAsync("localhost");
         AssertValidPingOutput(result);
     }
-#pragma warning restore CS1998 // Remove this
+
+    [TestMethod]
+    public async Task RunLongRunningAsync_WithStartInfo_Success()
+    {
+        var psi = new ProcessStartInfo("ping")
+        {
+            Arguments = "localhost"
+        };
+
+        int exitCode = await Sut.RunLongRunningAsync(
+            psi,
+            progressOutput: _ => { },
+            progressError: _ => { },
+            token: CancellationToken.None);
+
+        Assert.AreEqual<int>(0, exitCode);
+    }
+
+    [TestMethod]
+    public async Task RunAsync_WithProgress_ReportsOutput()
+    {
+        List<string?> lines = new();
+        IProgress<string?> progress = new Progress<string?>(line =>
+        {
+            if (!string.IsNullOrWhiteSpace(line))
+            {
+                lines.Add(line);
+            }
+        });
+
+        PingResult result = await Sut.RunAsync("localhost", progress);
+
+        AssertValidPingOutput(result);
+        Assert.AreNotEqual<int>(0, lines.Count, "Expected at least one line reported via progress.");
+    }
 
     [TestMethod]
     public void StringBuilderAppendLine_InParallel_IsNotThreadSafe()
