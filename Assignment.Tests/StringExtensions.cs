@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#pragma warning disable
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace IntelliTect.TestTools;

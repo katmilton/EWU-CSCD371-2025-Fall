@@ -101,7 +101,7 @@ public class PingProcessTests
         catch (AggregateException ex)
         {
 
-            Assert.IsInstanceOfType(ex, typeof(AggregateException));
+            Assert.IsInstanceOfType<AggregateException>(ex);
             return;
 
         }
