@@ -163,7 +163,9 @@ public class PingProcessTests
     {
         var psi = new ProcessStartInfo("ping")
         {
-            Arguments = "localhost"
+            Arguments = OperatingSystem.IsWindows()
+                ? "-n 4 localhost"
+                : "-c 4 localhost",
         };
 
         int exitCode = await Sut.RunLongRunningAsync(

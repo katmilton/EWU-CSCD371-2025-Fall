@@ -17,7 +17,7 @@ public class PingProcess
 
     public PingResult Run(string hostNameOrAddress)
     {
-        StartInfo.Arguments = hostNameOrAddress;
+        StartInfo.Arguments = BuildPingArguments(hostNameOrAddress);
         StringBuilder? stringBuilder = null;
         void updateStdOutput(string? line) =>
             (stringBuilder??=new StringBuilder()).AppendLine(line);
@@ -29,7 +29,7 @@ public class PingProcess
     {
         return Task.Run(() =>
         { 
-            StartInfo.Arguments = hostNameOrAddress;
+            StartInfo.Arguments = BuildPingArguments(hostNameOrAddress);
             StringBuilder? stringBuilder = null;
             void updateStdOutput(string? line) =>
                 (stringBuilder ??= new StringBuilder()).AppendLine(line);
@@ -42,7 +42,7 @@ public class PingProcess
     async public Task<PingResult> RunAsync(
         string hostNameOrAddress, CancellationToken cancellationToken = default)
     {
-        StartInfo.Arguments = hostNameOrAddress;
+        StartInfo.Arguments = BuildPingArguments(hostNameOrAddress);
         StringBuilder? stringBuilder = null;
 
         void updateStdOutput(string? line) =>
@@ -66,7 +66,7 @@ public class PingProcess
         {
             var startInfo = new ProcessStartInfo("ping")
             {
-                Arguments = hostNameOrAddresses
+                Arguments = BuildPingArguments(hostNameOrAddresses)
             };
 
             StringBuilder? stringBuilder = null;
@@ -108,7 +108,7 @@ public class PingProcess
 
                 var startInfo = new ProcessStartInfo("ping")
                 {
-                    Arguments = host
+                    Arguments = BuildPingArguments(host)
                 };
 
                 void updateStdOutput(string? line)
@@ -165,7 +165,7 @@ public class PingProcess
 
         var startInfo = new ProcessStartInfo("ping")
         {
-            Arguments = hostNameOrAddress
+            Arguments = BuildPingArguments(hostNameOrAddress)
         };
 
         StringBuilder? stringBuilder = null;
@@ -191,6 +191,19 @@ public class PingProcess
         };
         return RunProcessInternal(process, progressOutput, progressError, token);
     }
+
+    private static string BuildPingArguments(string hostNameOrAddress)
+    {
+        if (OperatingSystem.IsWindows())
+        {
+            return $"-n 4 {hostNameOrAddress}";
+        }
+        else
+        {
+            return $"-c 4 {hostNameOrAddress}";
+        }
+    }
+
 
     private Process RunProcessInternal(
         Process process,
