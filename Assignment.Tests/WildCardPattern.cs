@@ -1,5 +1,4 @@
-﻿#pragma warning disable
-// This code was originally sourced from https://github.com/PowerShell/PowerShell/blob/main/src/System.Management.Automation/engine/regex.cs
+﻿// This code was originally sourced from https://github.com/PowerShell/PowerShell/blob/main/src/System.Management.Automation/engine/regex.cs
 // and then modified to remove of PowerShell specific elements.
 #nullable disable // Nullable not supported in this legacy file.
 

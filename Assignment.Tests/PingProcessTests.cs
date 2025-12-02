@@ -199,6 +199,7 @@ public class PingProcessTests
     }
 
     [TestMethod]
+    [Ignore] // Ignored because this is a test to demonstrate that StringBuilder is not thread-safe.
     public void StringBuilderAppendLine_InParallel_IsNotThreadSafe()
     {
         IEnumerable<int> numbers = Enumerable.Range(0, short.MaxValue);
