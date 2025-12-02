@@ -21,7 +21,8 @@ Ping statistics for ::1:
 Approximate round trip times in milli-seconds:
     Minimum = 0ms, Maximum = 1ms, Average = 0ms".Trim();
 
-
+    private static readonly string[] NewLineSeparators = ["\r\n", "\n"];
+    private static readonly char[] HostSeparators = [' ', '\t'];
     protected override int RunProcessInternal(ProcessStartInfo startInfo, Action<string?>? progressOutput, Action<string?>? progressError, CancellationToken token)
     {
         token.ThrowIfCancellationRequested();
@@ -41,11 +42,11 @@ Approximate round trip times in milli-seconds:
 
         string text = _Template.Replace("{HOST}", host);
 
-        foreach (string line in text.Split (new[] { "\r\n", "\n" },
-                     StringSplitOptions.None))
+        foreach (string line in text.Split(NewLineSeparators, StringSplitOptions.None))
         {
             progressOutput?.Invoke(line);
         }
+
 
         progressOutput?.Invoke(null);
         progressError?.Invoke(null);
@@ -59,9 +60,9 @@ Approximate round trip times in milli-seconds:
             return "localhost";
         }
 
-        
+
         string[] parts = arguments.Split(
-            new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+        HostSeparators, StringSplitOptions.RemoveEmptyEntries);
 
         return parts.Length == 0 ? "localhost" : parts[^1];
     }
