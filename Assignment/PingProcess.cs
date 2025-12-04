@@ -27,44 +27,70 @@ public class PingProcess
         return new PingResult( exit, stringBuilder?.ToString());
     }
 
-    public Task<PingResult> RunTaskAsync(string hostNameOrAddress) =>
-        Task.Run(() => Run(hostNameOrAddress));
+    public Task<PingResult> RunTaskAsync(string hostNameOrAddress)
+    {
+        return Task.Run(() =>
+        { 
+            StartInfo.Arguments = BuildPingArguments(hostNameOrAddress);
+            StringBuilder? stringBuilder = null;
+            void updateStdOutput(string? line) =>
+                (stringBuilder ??= new StringBuilder()).AppendLine(line);
+
+           int exit = RunProcessInternal(StartInfo, updateStdOutput, updateStdOutput, default);
+            return new PingResult(exit, stringBuilder?.ToString());
+        });
+    }
 
     async public Task<PingResult> RunAsync(
-        string hostNameOrAddress, CancellationToken cancellationToken = default) =>
-        await Task.Run(() => Run(hostNameOrAddress), cancellationToken);
+        string hostNameOrAddress, CancellationToken cancellationToken = default)
+    {
+        StartInfo.Arguments = BuildPingArguments(hostNameOrAddress);
+        StringBuilder? stringBuilder = null;
 
+        void updateStdOutput(string? line) =>
+            (stringBuilder ??= new StringBuilder()).AppendLine(line);
 
-    public async Task<PingResult> RunAsync(string hostNameOrAddresses, IProgress<string?> progress, CancellationToken cancellationToken = default)
+        int exit = await Task.Run(() =>
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return RunProcessInternal(StartInfo, updateStdOutput, default, cancellationToken);
+
+        }, cancellationToken);
+
+        return new PingResult(exit, stringBuilder?.ToString());
+    }
+
+    public Task<PingResult> RunAsync(string hostNameOrAddresses, IProgress<string?> progress, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(progress);
 
-        var startInfo = new ProcessStartInfo("ping")
+        return Task.Run(() =>
         {
-            Arguments = BuildPingArguments(hostNameOrAddresses)
-        };
-
-        StringBuilder? stringBuilder = null;
-
-        void updateStdOutput(string? line)
-        {
-
-            if (line is not null)
+            var startInfo = new ProcessStartInfo("ping")
             {
-                (stringBuilder ??= new StringBuilder()).AppendLine(line);
+                Arguments = BuildPingArguments(hostNameOrAddresses)
+            };
+
+            StringBuilder? stringBuilder = null;
+
+            void updateStdOutput(string? line)
+            {
+
+                if (line is not null)
+                {
+                    (stringBuilder ??= new StringBuilder()).AppendLine(line);
+                }
+
+                progress.Report(line);
+
             }
 
-            progress.Report(line);
-
-        }
-
-        cancellationToken.ThrowIfCancellationRequested();
-
-        int process = await Task.Run(() =>
-        RunProcessInternal(startInfo, updateStdOutput, updateStdOutput, cancellationToken),
-            cancellationToken);
-        string? stdOutput = stringBuilder?.ToString();
-        return new PingResult(process, stdOutput);
+            cancellationToken.ThrowIfCancellationRequested();
+            
+            int process = RunProcessInternal(startInfo, updateStdOutput, default, cancellationToken);
+            string? stdOutput = stringBuilder?.ToString(); 
+            return Task.FromResult (new PingResult(process, stdOutput));
+        }, cancellationToken);
         
     }
 
@@ -83,19 +109,38 @@ public class PingProcess
     {
         ArgumentNullException.ThrowIfNull(hostNameOrAddresses);
 
-        Task<PingResult>[] tasks = hostNameOrAddresses
-            .Select(host => RunAsync(host, cancellationToken))
+        StringBuilder stringBuilder = new();
+        object syncLock = new();
+
+        Task<int>[] tasks = hostNameOrAddresses
+            .Select(host => Task.Run(() =>
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                var startInfo = new ProcessStartInfo("ping")
+                {
+                    Arguments = BuildPingArguments(host)
+                };
+
+                void updateStdOutput(string? line)
+                {
+                    if (line is null) return;
+
+                    lock (syncLock)
+                    {
+                        stringBuilder.AppendLine(line);
+                    }
+                }
+
+                int exit = RunProcessInternal(startInfo, updateStdOutput, default, cancellationToken);
+                return exit;
+            }, cancellationToken))
             .ToArray();
 
-        PingResult[] results = await Task.WhenAll(tasks);
+        int[] exitCodes = await Task.WhenAll(tasks);
 
-        int totalExitCode = results.Sum(r => r.ExitCode);
-        string combinedOutput = string.Join(
-            Environment.NewLine,
-            results
-            .Select(r => r.StdOutput)
-            .Where(s => !string.IsNullOrWhiteSpace(s)));
-
+        int totalExitCode = exitCodes.Sum();
+        string combinedOutput = stringBuilder.ToString().TrimEnd('\r', '\n');
         return new PingResult(totalExitCode, combinedOutput);
     }
 

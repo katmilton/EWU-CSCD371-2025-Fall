@@ -35,6 +35,11 @@ public class PingProcessTests
     [TestMethod]
     public void Run_GoogleDotCom_Success()
     {
+       /* if (!OperatingSystem.IsWindows())
+        {
+            Assert.Inconclusive("Run_GoogleDotCom_Success is only reliable on Windows; CI runs on Linux");
+        }*/
+
         int exitCode = Sut.Run("google.com").ExitCode;
         Assert.AreEqual<int>(0, exitCode);
     }
@@ -43,6 +48,10 @@ public class PingProcessTests
     [TestMethod]
     public void Run_InvalidAddressOutput_Success()
     {
+       /* if (!OperatingSystem.IsWindows())
+        {
+            Assert.Inconclusive("This test verifies Windows ping error text; skip on non-Windows");
+        }*/
         (int exitCode, string? stdOutput) = Sut.Run("badaddress");
         Assert.IsFalse(string.IsNullOrWhiteSpace(stdOutput));
         stdOutput = WildcardPattern.NormalizeLineEndings(stdOutput!.Trim());
@@ -61,7 +70,7 @@ public class PingProcessTests
     }
 
     [TestMethod]
-    public void RunTaskAsync_LocalhostReturnsValidPingOutput_Success()
+    public void RunTaskAsync_Success()
     {
         Task<PingResult> task = Sut.RunTaskAsync("localhost");
         PingResult result = task.Result;
